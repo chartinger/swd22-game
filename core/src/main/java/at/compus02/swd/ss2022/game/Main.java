@@ -5,8 +5,10 @@ import at.compus02.swd.ss2022.game.gameobjects.Sign;
 import at.compus02.swd.ss2022.game.input.GameInput;
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.Array;
@@ -24,12 +26,14 @@ public class Main extends ApplicationAdapter {
 	private final float updatesPerSecond = 60;
 	private final float logicFrameTime = 1 / updatesPerSecond;
 	private float deltaAccumulator = 0;
+	private BitmapFont font;
 
 	@Override
 	public void create() {
 		batch = new SpriteBatch();
 		gameObjects.add(new Sign());
-
+		font = new BitmapFont();
+		font.setColor(Color.WHITE);
 		Gdx.input.setInputProcessor(this.gameInput);
 	}
 
@@ -45,6 +49,7 @@ public class Main extends ApplicationAdapter {
 		for(GameObject gameObject : gameObjects) {
 			gameObject.draw(batch);
 		}
+		font.draw(batch, "Hello Game", -220, -220);
 		batch.end();
 	}
 
