@@ -1,3 +1,8 @@
+# Gruppe B - Software Design
+
+- Hade Mohamed
+- Raphael Pansi
+
 # SWDGame
 
 A [libGDX](https://libgdx.com/) project generated with [gdx-liftoff](https://github.com/tommyettinger/gdx-liftoff).
