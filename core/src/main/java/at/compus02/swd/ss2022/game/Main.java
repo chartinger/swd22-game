@@ -7,6 +7,8 @@ import at.compus02.swd.ss2022.game.gameobjects.factories.PlayerFactory;
 import at.compus02.swd.ss2022.game.gameobjects.factories.TileFactory;
 import at.compus02.swd.ss2022.game.gameobjects.factories.Factory.GameObjectType;
 import at.compus02.swd.ss2022.game.input.GameInput;
+import at.compus02.swd.ss2022.repository.AssetRepository;
+
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
@@ -22,6 +24,7 @@ import com.badlogic.gdx.utils.viewport.ExtendViewport;
  */
 public class Main extends ApplicationAdapter {
 	private SpriteBatch batch;
+	private AssetRepository assetRepository;
 	private float worldHeight = 480.0f;
 	private float worldWidth = 480.0f;
 	private ExtendViewport viewport = new ExtendViewport(worldWidth, worldHeight, worldWidth, worldHeight);
@@ -38,7 +41,13 @@ public class Main extends ApplicationAdapter {
 		font = new BitmapFont();
 		font.setColor(Color.WHITE);
 		Gdx.input.setInputProcessor(gameInput);
+		assetRepository = AssetRepository.getInstance();
+		initTextures();
 		initGameObjects();
+	}
+
+	private void initTextures() {
+		assetRepository.preloadAssets();
 	}
 
 	private void initGameObjects() {
@@ -100,6 +109,7 @@ public class Main extends ApplicationAdapter {
 	@Override
 	public void dispose() {
 		batch.dispose();
+		assetRepository.dispose();
 	}
 
 	@Override

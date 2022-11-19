@@ -9,6 +9,7 @@ public interface Factory {
         TILE_GRAVEL,
         TILE_WALL,
         TILE_WATER,
+        SIGN
     }
 
     public GameObject create(GameObjectType type);
