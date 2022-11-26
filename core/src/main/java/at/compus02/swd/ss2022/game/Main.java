@@ -1,9 +1,11 @@
 package at.compus02.swd.ss2022.game;
 
 import at.compus02.swd.ss2022.game.gameobjects.GameObject;
+import at.compus02.swd.ss2022.game.gameobjects.Player;
 import at.compus02.swd.ss2022.game.gameobjects.Tile;
 import at.compus02.swd.ss2022.game.gameobjects.factories.Factory;
 import at.compus02.swd.ss2022.game.gameobjects.factories.PlayerFactory;
+import at.compus02.swd.ss2022.game.gameobjects.factories.ProjectileFactory;
 import at.compus02.swd.ss2022.game.gameobjects.factories.TileFactory;
 import at.compus02.swd.ss2022.game.gameobjects.factories.Factory.GameObjectType;
 import at.compus02.swd.ss2022.game.input.GameInput;
@@ -24,12 +26,9 @@ import com.badlogic.gdx.utils.viewport.ExtendViewport;
  */
 public class Main extends ApplicationAdapter {
 	private SpriteBatch batch;
-	private AssetRepository assetRepository;
 	private float worldHeight = 480.0f;
 	private float worldWidth = 480.0f;
 	private ExtendViewport viewport = new ExtendViewport(worldWidth, worldHeight, worldWidth, worldHeight);
-	private GameInput gameInput = new GameInput();
-	private Array<GameObject> gameObjects = new Array<>();
 	private final float updatesPerSecond = 60;
 	private final float logicFrameTime = 1 / updatesPerSecond;
 	private float deltaAccumulator = 0;
@@ -40,17 +39,15 @@ public class Main extends ApplicationAdapter {
 		batch = new SpriteBatch();
 		font = new BitmapFont();
 		font.setColor(Color.WHITE);
-		Gdx.input.setInputProcessor(gameInput);
-		assetRepository = AssetRepository.getInstance();
 		initTextures();
-		initGameObjects();
+		initGameObjectsAndInput();
 	}
 
 	private void initTextures() {
-		assetRepository.preloadAssets();
+		AssetRepository.getInstance().preloadAssets();
 	}
 
-	private void initGameObjects() {
+	private void initGameObjectsAndInput() {
 		float maxHeight = worldHeight / 2;
 		float minHeight = maxHeight * (-1);
 		float maxWidth = worldWidth / 2;
@@ -69,17 +66,25 @@ public class Main extends ApplicationAdapter {
 				}
 				GameObject tile = TileFactory.getInstance().create(type);
 				tile.setPosition(x, y);
-				gameObjects.add(tile);
 			}
 		}
 
-		GameObject player = PlayerFactory.getInstance().create(Factory.GameObjectType.PLAYER);
+		Player player = PlayerFactory.getInstance().create(Factory.GameObjectType.PLAYER);
 		player.setPosition(0, 0);
-		gameObjects.add(player);
+
+		Gdx.input.setInputProcessor(new GameInput(player));
+	}
+
+	private Array<GameObject> getGameObjects() {
+		Array<GameObject> gameObjects = new Array<>();
+		gameObjects.addAll(TileFactory.getInstance().getObjects());
+		gameObjects.addAll(PlayerFactory.getInstance().getObjects());
+		gameObjects.addAll(ProjectileFactory.getInstance().getObjects());
+		return gameObjects;
 	}
 
 	private void act(float delta) {
-		for (GameObject gameObject : gameObjects) {
+		for (GameObject gameObject : getGameObjects()) {
 			gameObject.act(delta);
 		}
 	}
@@ -87,7 +92,7 @@ public class Main extends ApplicationAdapter {
 	private void draw() {
 		batch.setProjectionMatrix(viewport.getCamera().combined);
 		batch.begin();
-		for (GameObject gameObject : gameObjects) {
+		for (GameObject gameObject : getGameObjects()) {
 			gameObject.draw(batch);
 		}
 		batch.end();
@@ -109,7 +114,7 @@ public class Main extends ApplicationAdapter {
 	@Override
 	public void dispose() {
 		batch.dispose();
-		assetRepository.dispose();
+		AssetRepository.getInstance().dispose();
 	}
 
 	@Override

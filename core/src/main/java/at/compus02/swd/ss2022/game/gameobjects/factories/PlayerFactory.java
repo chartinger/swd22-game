@@ -3,7 +3,6 @@ package at.compus02.swd.ss2022.game.gameobjects.factories;
 import java.util.ArrayList;
 import java.util.List;
 
-import at.compus02.swd.ss2022.game.gameobjects.GameObject;
 import at.compus02.swd.ss2022.game.gameobjects.Player;
 
 public class PlayerFactory implements Factory {
@@ -22,7 +21,7 @@ public class PlayerFactory implements Factory {
     }
 
     @Override
-    public GameObject create(GameObjectType type) {
+    public Player create(GameObjectType type) {
         Player player = null;
 
         switch (type) {

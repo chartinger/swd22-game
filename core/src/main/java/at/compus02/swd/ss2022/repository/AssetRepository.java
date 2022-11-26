@@ -6,6 +6,16 @@ import java.util.Map;
 import com.badlogic.gdx.graphics.Texture;
 
 public class AssetRepository {
+    public enum TextureType {
+        PLAYER,
+        TILE_GRASS,
+        TILE_GRAVEL,
+        TILE_WALL,
+        TILE_WATER,
+        SIGN,
+        PROJECTILE,
+    }
+
     private static AssetRepository instance = null;
     private Map<TextureType, Texture> textureByType = null;
 
@@ -28,6 +38,7 @@ public class AssetRepository {
         textureByType.put(TextureType.TILE_WALL, new Texture("tile_wall.png"));
         textureByType.put(TextureType.TILE_WATER, new Texture("tile_water.png"));
         textureByType.put(TextureType.SIGN, new Texture("sign.png"));
+        textureByType.put(TextureType.PROJECTILE, new Texture("projectile.png"));
     }
 
     public Texture getTexture(TextureType textureType) {
@@ -44,14 +55,5 @@ public class AssetRepository {
         for (Texture texture : textureByType.values()) {
             texture.dispose();
         }
-    }
-
-    public enum TextureType {
-        PLAYER,
-        TILE_GRASS,
-        TILE_GRAVEL,
-        TILE_WALL,
-        TILE_WATER,
-        SIGN
     }
 }

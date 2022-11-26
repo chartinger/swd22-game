@@ -3,7 +3,6 @@ package at.compus02.swd.ss2022.game.gameobjects.factories;
 import java.util.ArrayList;
 import java.util.List;
 
-import at.compus02.swd.ss2022.game.gameobjects.GameObject;
 import at.compus02.swd.ss2022.game.gameobjects.Tile;
 import at.compus02.swd.ss2022.game.gameobjects.tiles.Grass;
 import at.compus02.swd.ss2022.game.gameobjects.tiles.Gravel;
@@ -26,7 +25,7 @@ public class TileFactory implements Factory {
     }
 
     @Override
-    public GameObject create(GameObjectType type) {
+    public Tile create(GameObjectType type) {
         Tile tile = null;
 
         switch (type) {
