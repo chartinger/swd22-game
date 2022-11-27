@@ -9,7 +9,7 @@ import at.compus02.swd.ss2022.game.gameobjects.tiles.Gravel;
 import at.compus02.swd.ss2022.game.gameobjects.tiles.Wall;
 import at.compus02.swd.ss2022.game.gameobjects.tiles.Water;
 
-public class TileFactory implements GameObjectFactory {
+public class TileFactory implements GameObjectFactory<Tile> {
     private static TileFactory instance;
     private List<Tile> objects;
 

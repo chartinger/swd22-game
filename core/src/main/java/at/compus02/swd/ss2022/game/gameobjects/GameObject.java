@@ -46,6 +46,7 @@ public abstract class GameObject implements PositionSubject {
     @Override
     public void registerObserver(PositionObserver observer) {
         positionObservers.add(observer);
+        notifyObserver(observer);
     }
 
     @Override
@@ -56,7 +57,11 @@ public abstract class GameObject implements PositionSubject {
     @Override
     public void notifyObservers() {
         for (PositionObserver observer : positionObservers) {
-            observer.update(getSprite().getX(), getSprite().getY(), MoveDirection.NONE);
+            notifyObserver(observer);
         }
+    }
+
+    private void notifyObserver(PositionObserver observer) {
+        observer.update(getSprite().getX(), getSprite().getY(), MoveDirection.NONE);
     }
 }

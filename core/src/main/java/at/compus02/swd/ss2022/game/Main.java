@@ -1,14 +1,17 @@
 package at.compus02.swd.ss2022.game;
 
+import at.compus02.swd.ss2022.game.gameobjects.Enemy;
 import at.compus02.swd.ss2022.game.gameobjects.GameObject;
 import at.compus02.swd.ss2022.game.gameobjects.Player;
 import at.compus02.swd.ss2022.game.gameobjects.Tile;
+import at.compus02.swd.ss2022.game.gameobjects.factories.EnemyFactory;
 import at.compus02.swd.ss2022.game.gameobjects.factories.GameObjectFactory;
 import at.compus02.swd.ss2022.game.gameobjects.factories.PlayerFactory;
 import at.compus02.swd.ss2022.game.gameobjects.factories.ProjectileFactory;
 import at.compus02.swd.ss2022.game.gameobjects.factories.TileFactory;
 import at.compus02.swd.ss2022.game.gameobjects.factories.GameObjectFactory.GameObjectType;
 import at.compus02.swd.ss2022.game.input.GameInput;
+import at.compus02.swd.ss2022.game.observers.position.EnemyPositionObserver;
 import at.compus02.swd.ss2022.game.observers.position.PlayerPositionObserver;
 import at.compus02.swd.ss2022.logger.ConsoleLogger;
 import at.compus02.swd.ss2022.logger.Logger;
@@ -80,6 +83,9 @@ public class Main extends ApplicationAdapter {
 		Player player = PlayerFactory.getInstance().create(GameObjectFactory.GameObjectType.PLAYER);
 		player.setPosition(0, 0);
 
+		Enemy enemy = EnemyFactory.getInstance().create(GameObjectFactory.GameObjectType.ENEMY);
+		enemy.setPosition(100, 0);
+
 		Gdx.input.setInputProcessor(new GameInput(player));
 	}
 
@@ -95,12 +101,14 @@ public class Main extends ApplicationAdapter {
 
 	private void initGameObjectObservers() {
 		Player player = PlayerFactory.getInstance().getObjects()[0];
-
 		PlayerPositionObserver playerPositionUIObserver = new PlayerPositionObserver(userInterfaceLogger);
 		PlayerPositionObserver playerPositionConsoleObserver = new PlayerPositionObserver(consoleLogger);
-
 		player.registerObserver(playerPositionUIObserver);
 		player.registerObserver(playerPositionConsoleObserver);
+
+		Enemy enemy = EnemyFactory.getInstance().getObjects()[0];
+		EnemyPositionObserver enemyPositionConsoleObserver = new EnemyPositionObserver(consoleLogger);
+		enemy.registerObserver(enemyPositionConsoleObserver);
 	}
 
 	private Array<GameObject> getGameObjects() {
@@ -108,6 +116,7 @@ public class Main extends ApplicationAdapter {
 		gameObjects.addAll(TileFactory.getInstance().getObjects());
 		gameObjects.addAll(PlayerFactory.getInstance().getObjects());
 		gameObjects.addAll(ProjectileFactory.getInstance().getObjects());
+		gameObjects.addAll(EnemyFactory.getInstance().getObjects());
 		return gameObjects;
 	}
 

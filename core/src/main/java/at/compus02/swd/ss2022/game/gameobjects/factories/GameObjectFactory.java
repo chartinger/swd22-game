@@ -2,7 +2,7 @@ package at.compus02.swd.ss2022.game.gameobjects.factories;
 
 import at.compus02.swd.ss2022.game.gameobjects.GameObject;
 
-public interface GameObjectFactory {
+public interface GameObjectFactory<T extends GameObject> {
     public enum GameObjectType {
         PLAYER,
         TILE_GRASS,
@@ -11,12 +11,13 @@ public interface GameObjectFactory {
         TILE_WATER,
         SIGN,
         PROJECTILE,
+        ENEMY
     }
 
-    public GameObject create(GameObjectType type);
+    public T create(GameObjectType type);
 
     public void initalize();
 
-    public GameObject[] getObjects();
+    public T[] getObjects();
 
 }

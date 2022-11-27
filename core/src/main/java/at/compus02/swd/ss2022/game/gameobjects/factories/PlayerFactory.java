@@ -5,7 +5,7 @@ import java.util.List;
 
 import at.compus02.swd.ss2022.game.gameobjects.Player;
 
-public class PlayerFactory implements GameObjectFactory {
+public class PlayerFactory implements GameObjectFactory<Player> {
     private static PlayerFactory instance;
     private List<Player> objects;
 
