@@ -3,12 +3,16 @@ package at.compus02.swd.ss2022.game;
 import at.compus02.swd.ss2022.game.gameobjects.GameObject;
 import at.compus02.swd.ss2022.game.gameobjects.Player;
 import at.compus02.swd.ss2022.game.gameobjects.Tile;
-import at.compus02.swd.ss2022.game.gameobjects.factories.Factory;
+import at.compus02.swd.ss2022.game.gameobjects.factories.GameObjectFactory;
 import at.compus02.swd.ss2022.game.gameobjects.factories.PlayerFactory;
 import at.compus02.swd.ss2022.game.gameobjects.factories.ProjectileFactory;
 import at.compus02.swd.ss2022.game.gameobjects.factories.TileFactory;
-import at.compus02.swd.ss2022.game.gameobjects.factories.Factory.GameObjectType;
+import at.compus02.swd.ss2022.game.gameobjects.factories.GameObjectFactory.GameObjectType;
 import at.compus02.swd.ss2022.game.input.GameInput;
+import at.compus02.swd.ss2022.game.observers.position.PlayerPositionObserver;
+import at.compus02.swd.ss2022.logger.ConsoleLogger;
+import at.compus02.swd.ss2022.logger.Logger;
+import at.compus02.swd.ss2022.logger.UserInterfaceLogger;
 import at.compus02.swd.ss2022.repository.AssetRepository;
 
 import com.badlogic.gdx.ApplicationAdapter;
@@ -33,6 +37,8 @@ public class Main extends ApplicationAdapter {
 	private final float logicFrameTime = 1 / updatesPerSecond;
 	private float deltaAccumulator = 0;
 	private BitmapFont font;
+	private UserInterfaceLogger userInterfaceLogger;
+	private Logger consoleLogger;
 
 	@Override
 	public void create() {
@@ -40,7 +46,9 @@ public class Main extends ApplicationAdapter {
 		font = new BitmapFont();
 		font.setColor(Color.WHITE);
 		initTextures();
+		initLoggers();
 		initGameObjectsAndInput();
+		initGameObjectObservers();
 	}
 
 	private void initTextures() {
@@ -55,24 +63,44 @@ public class Main extends ApplicationAdapter {
 
 		for (float x = minWidth; x < maxWidth; x += Tile.WIDTH) {
 			for (float y = minHeight; y < maxHeight; y += Tile.HEIGHT) {
-				GameObjectType type = Factory.GameObjectType.TILE_GRASS;
+				GameObjectType type = GameObjectFactory.GameObjectType.TILE_GRASS;
 				if (x == minWidth || x == maxWidth - Tile.WIDTH || y == minHeight || y == maxHeight - Tile.HEIGHT) {
-					type = Factory.GameObjectType.TILE_WALL;
+					type = GameObjectFactory.GameObjectType.TILE_WALL;
 				} else if (y < minHeight + Tile.HEIGHT * 4) {
-					type = Factory.GameObjectType.TILE_WATER;
+					type = GameObjectFactory.GameObjectType.TILE_WATER;
 				} else if (y < minHeight + Tile.HEIGHT * 5 || y > maxHeight - Tile.HEIGHT * 3
 						|| x <= minWidth + Tile.WIDTH || x >= maxWidth - Tile.WIDTH * 2) {
-					type = Factory.GameObjectType.TILE_GRAVEL;
+					type = GameObjectFactory.GameObjectType.TILE_GRAVEL;
 				}
 				GameObject tile = TileFactory.getInstance().create(type);
 				tile.setPosition(x, y);
 			}
 		}
 
-		Player player = PlayerFactory.getInstance().create(Factory.GameObjectType.PLAYER);
+		Player player = PlayerFactory.getInstance().create(GameObjectFactory.GameObjectType.PLAYER);
 		player.setPosition(0, 0);
 
 		Gdx.input.setInputProcessor(new GameInput(player));
+	}
+
+	private void initLoggers() {
+		final float UI_LOG_POSITION_X = -worldHeight / 2;
+		final float UI_LOG_POSITION_Y = worldHeight / 2 - 5;
+		userInterfaceLogger = UserInterfaceLogger.getInstance();
+		userInterfaceLogger.setPositionX(UI_LOG_POSITION_X);
+		userInterfaceLogger.setPositionY(UI_LOG_POSITION_Y);
+
+		consoleLogger = ConsoleLogger.getInstance();
+	}
+
+	private void initGameObjectObservers() {
+		Player player = PlayerFactory.getInstance().getObjects()[0];
+
+		PlayerPositionObserver playerPositionUIObserver = new PlayerPositionObserver(userInterfaceLogger);
+		PlayerPositionObserver playerPositionConsoleObserver = new PlayerPositionObserver(consoleLogger);
+
+		player.registerObserver(playerPositionUIObserver);
+		player.registerObserver(playerPositionConsoleObserver);
 	}
 
 	private Array<GameObject> getGameObjects() {
@@ -95,6 +123,7 @@ public class Main extends ApplicationAdapter {
 		for (GameObject gameObject : getGameObjects()) {
 			gameObject.draw(batch);
 		}
+		userInterfaceLogger.draw(batch);
 		batch.end();
 	}
 

@@ -5,7 +5,7 @@ import java.util.List;
 
 import at.compus02.swd.ss2022.game.gameobjects.Projectile;
 
-public class ProjectileFactory implements Factory {
+public class ProjectileFactory implements GameObjectFactory {
     private static ProjectileFactory instance;
     private List<Projectile> objects;
 

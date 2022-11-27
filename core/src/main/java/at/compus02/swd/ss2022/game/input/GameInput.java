@@ -81,5 +81,4 @@ public class GameInput extends InputAdapter {
         }
         return true;
     }
-
 }

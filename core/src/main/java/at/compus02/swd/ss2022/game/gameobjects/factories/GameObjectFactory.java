@@ -2,7 +2,7 @@ package at.compus02.swd.ss2022.game.gameobjects.factories;
 
 import at.compus02.swd.ss2022.game.gameobjects.GameObject;
 
-public interface Factory {
+public interface GameObjectFactory {
     public enum GameObjectType {
         PLAYER,
         TILE_GRASS,

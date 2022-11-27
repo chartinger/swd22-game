@@ -4,7 +4,7 @@ import at.compus02.swd.ss2022.game.gameobjects.MovingGameObject.MoveDirection;
 import at.compus02.swd.ss2022.game.gameobjects.Player;
 import at.compus02.swd.ss2022.game.gameobjects.Projectile;
 import at.compus02.swd.ss2022.game.gameobjects.factories.ProjectileFactory;
-import at.compus02.swd.ss2022.game.gameobjects.factories.Factory.GameObjectType;
+import at.compus02.swd.ss2022.game.gameobjects.factories.GameObjectFactory.GameObjectType;
 
 public class FireProjectileCommand implements Command {
 

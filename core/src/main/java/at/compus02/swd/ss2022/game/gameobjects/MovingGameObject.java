@@ -1,5 +1,7 @@
 package at.compus02.swd.ss2022.game.gameobjects;
 
+import at.compus02.swd.ss2022.game.observers.position.PositionObserver;
+
 public abstract class MovingGameObject extends GameObject {
     public enum MoveDirection {
         UP,
@@ -38,6 +40,14 @@ public abstract class MovingGameObject extends GameObject {
     public void setMoveDirection(MoveDirection moveDirection) {
         this.moveDirectionBefore = this.moveDirection;
         this.moveDirection = moveDirection;
+        this.notifyObservers();
+    }
+
+    @Override
+    public void notifyObservers() {
+        for (PositionObserver observer : positionObservers) {
+            observer.update(getSprite().getX(), getSprite().getY(), getMoveDirection());
+        }
     }
 
     @Override
