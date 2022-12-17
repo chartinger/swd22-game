@@ -49,7 +49,6 @@ public class UserInterfaceLogger implements Logger {
     }
 
     public void draw(SpriteBatch batch) {
-        font.setColor(Color.WHITE);
         font.draw(batch, message, getPositionX(), getPositionY());
     }
 }
